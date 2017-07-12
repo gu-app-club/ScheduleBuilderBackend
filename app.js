@@ -4,12 +4,31 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var mongoose = require('mongoose');
 
 var index = require('./routes/index');
 var users = require('./routes/users');
 var api = require('./routes/api');
 
 var app = express();
+
+var options = {
+    server: { socketOptions: { keepAlive: 300000, connectTimeoutMS: 30000 } },
+    replset: { socketOptions: { keepAlive: 300000, connectTimeoutMS: 30000 } }
+};
+
+mongodbUri = 'mongodb://tjdford:TJ1994maxman@ds139288.mlab.com:39288/schedule-builder/catalog-fall-2017';
+
+mongoose.connect(mongodbUri, options);
+mongoose.Promise = global.Promise;
+
+var conn = mongoose.connection;
+
+conn.on('error', console.error.bind(console, 'connection error:'));
+
+conn.once('open', function () {console.log("Great success!")});
+
+
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
