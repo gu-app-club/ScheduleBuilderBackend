@@ -2,32 +2,75 @@ var express = require('express');
 var router = express.Router();
 var Catalog = require('../models/classes');
 
-/* GET users listing. */
-router.get('/', function(req, res, next) {
-    res.send('Hello, World! I Hate Jen.');
-});
 
+
+// GETS all Subjects from Catalog
 router.get('/subjects', function (req, res) {
     Catalog.distinct("Subject").then(function (subjects) {
         res.send({subjects:subjects})
     })
 });
 
-router.get('/courses', function (req, res) {
-    Catalog.aggregate({ $group: {
-        _id: { Subject: "$Subject", Course: "$Course" }
-    }}).then(function (courses) {
-        refined = [];
-        courses.forEach(function (course) {refined.push(course._id);});
-        refined.sort(function(a, b) {
-            var textA = a.Subject;
-            var textB = b.Subject;
-            return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
-        });
-        res.send({courses:refined})
+// GETS all Subject Courses combinations from Catalog
+router.get('/classes', function (req, res) {
+    Catalog.distinct("Class").then(function(classes){
+        res.send(classes);
     })
 });
 
-module.exports = router;
+//GETS all Sections for a given Subject and Course (i.e. MATH 100)
+router.get('/sections', function(req, res){
+    Catalog.find({Subject:req.query.subject, Course:req.query.course},
+        'CRN Subject Course Section Week').then(function (sections) {
+        res.send({sections:sections})
+    })
+});
 
+router.get('/schedules', function(req, res){
+    courses = req.query.courses;
+
+    if(typeof courses == 'string'){
+        classes = courses.replace('_', ' ');
+        Catalog.find({Class:classes}).then(function (sections) {
+            res.send(sections)
+        })
+    }
+    else{
+        classes = courses.map(function (course) {return course.replace('_', ' ')});
+        Catalog.find({Class:{$in:classes}}).then(function (sections) {
+            var results = {};
+            classes.map(function (elem) { results[elem] = []});
+            sections.map(function (section) {results[section.Class].push(section);});
+            console.log(results);
+
+            res.send(results)
+        })
+    }
+});
+
+
+
+// returns true if week1 conflicts with week2; otherwise, false
+// week1 and week2 are dictionaries
+function conflicts(week1, week2) {
+
+    // iterates through the dictionary keys
+    // checks if corresponding time ranges
+    // from week1 and week2 conflict with each other
+    // the results are return in an array
+    conflict = Object.keys(week1).map(function(key){
+        return time_conflicts(week1[key], week2[key]);
+    });
+
+    // returns false if all values in the array are false; otherwise,
+    // week1 and week2, and the function returns true
+    return !conflict.every(function (value) { return !value });
+
+    // returns true if time1 conflicts with time2; otherwise false
+    function time_conflicts(time1, time2){
+        if(time1 == null || time2 == null){return false;}  // check if time1 or time2 are null
+        return !(time1[1] <= time2[0] || time2[1] <= time1[0]);
+    }
+}
+module.exports = router;
 

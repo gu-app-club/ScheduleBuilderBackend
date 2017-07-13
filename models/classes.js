@@ -63,8 +63,10 @@ const ClassSchema = new Schema({
     Week: {
         type: {String:[]},
         required: [true, 'Campus Field is required.']
+    },
+    Class:{
+        type: String
     }
-
 });
 
 const Class = mongoose.model('catalog-fall-2017', ClassSchema);
