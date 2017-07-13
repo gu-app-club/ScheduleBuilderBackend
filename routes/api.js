@@ -9,34 +9,25 @@ router.get('/', function(req, res, next) {
 
 router.get('/subjects', function (req, res) {
     Catalog.distinct("Subject").then(function (subjects) {
-        res.send(subjects)
+        res.send({subjects:subjects})
+    })
+});
+
+router.get('/courses', function (req, res) {
+    Catalog.aggregate({ $group: {
+        _id: { Subject: "$Subject", Course: "$Course" }
+    }}).then(function (courses) {
+        refined = [];
+        courses.forEach(function (course) {refined.push(course._id);});
+        refined.sort(function(a, b) {
+            var textA = a.Subject;
+            var textB = b.Subject;
+            return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
+        });
+        res.send({courses:refined})
     })
 });
 
 module.exports = router;
 
 
-
-//
-// // router.get('/courses', function (req, res, next) {
-// //     Class.distinct("Course").then(function (courses) {
-// //         res.send(courses)
-// //     })
-// // });
-//
-// router.get('/courses', function (req, res) {
-//
-//     Class.find({"Subject":req.query.subject}).then(function (courses) {
-//         res.send(courses)
-//     })
-// });
-//
-// router.post('/subjects', function (req, res) {
-//     Class.create(req.body).then(function (classes) {
-//         res.send(classes);
-//     });
-//     res.send({
-//         CRN: req.body.CRN,
-//         Title: req.body.Title
-//     });
-// });
