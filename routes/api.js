@@ -30,13 +30,14 @@ router.get('/sections', function(req, res){
     })
 });
 
+// GETS a all viable schedules. Might change this to a POST method
 router.get('/schedules', function(req, res){
     courses = req.query.courses;
 
     if(typeof courses == 'string'){
         classes = courses.replace('_', ' ');
         Catalog.find({Class:classes}).then(function (sections) {
-            res.send(sections)
+            res.send(sections.map(function (course) { return [course] }))
         })
     }
 
@@ -49,8 +50,8 @@ router.get('/schedules', function(req, res){
             // sort sections into dictionary by Class data field
             sections.map(function (section) {results[section.Class].push(section);});
             configured = Object.keys(results).map(function (key) { return results[key]});
-            all_schedules = product(configured);
-            res.send(all_schedules)
+
+            res.send(viable_schedules( product(configured)))
         })
     }
 });
@@ -78,6 +79,35 @@ function conflicts(week1, week2) {
         return !(time1[1] <= time2[0] || time2[1] <= time1[0]);
     }
 }
+
+function viable_schedules(all_schedules) {
+    schedules = [];
+
+    for(var i = 0; i < all_schedules.length; i++){
+        schedule = all_schedules[i].slice();
+        if(viable(all_schedules[i][0], all_schedules[i].splice(1))){
+            console.log(schedule);
+            schedules.push(schedule);
+        }
+    }
+
+    return schedules;
+
+    function viable(head, tail) {
+        console.log("head: ", head, "\ntail: ", tail);
+        if(tail.length == 0){
+            return true
+        }
+        else {
+            for(var i = 0; i < tail.length; i++){
+                if(conflicts(head.Week, tail[i].Week)){return false}
+            }
+            return viable(tail[0], tail.splice(1))
+        }
+    }
+}
+
+
 
 
 module.exports = router;
