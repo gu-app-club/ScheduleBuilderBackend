@@ -13,9 +13,11 @@ router.get('/subjects', function (req, res) {
 
 // GETS all Subject, Course Number, and Title combinations from Catalog
 router.get('/classes', function (req, res) {
-    Catalog.aggregate({"$group" : {_id : {Class:"$Class", Title:"$Title"}}}).then(function (classes) {
+    Catalog.aggregate({"$group" : {_id : {Subject:"$Subject", Course:"$Course", Title:"$Title"}}}
+        ).then(function (classes) {
             var results = classes.map(function (result) { return result._id });
-            results.sort(function(a,b) {return (a.Class > b.Class) ? 1 : ((b.Class > a.Class) ? -1 : 0);} );
+            results.sort(function(a,b) {return (a.Subject > b.Subject) ? 1 : ((b.Subject > a.Subject) ? -1
+                :(a.Course > b.Course) ? 1 :(a.Course < b.Course)? -1: 0);} );
         res.send(results)
     })
 });
@@ -37,6 +39,7 @@ router.get('/schedules', function(req, res){
             res.send(sections)
         })
     }
+
     else{
         classes = courses.map(function (course) {return course.replace('_', ' ')});
         Catalog.find({Class:{$in:classes}}).then(function (sections) {
