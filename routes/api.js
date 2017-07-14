@@ -56,6 +56,20 @@ router.get('/schedules', function(req, res){
     }
 });
 
+router.post('/schedules', function(req, res){
+    classes = req.body.classes;
+    Catalog.find({Class:{$in:classes}}).then(function (sections) {
+        var results = {};
+        // initialize results dictionary
+        classes.map(function (elem) {results[elem] = []});
+        // sort sections into dictionary by Class data field
+        sections.map(function (section) {results[section.Class].push(section);});
+        configured = Object.keys(results).map(function (key) {return results[key]});
+
+        res.send(viable_schedules(product(configured)))
+    })
+});
+
 
 // returns true if week1 conflicts with week2; otherwise, false
 // week1 and week2 are dictionaries
