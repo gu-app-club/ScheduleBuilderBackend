@@ -81,34 +81,27 @@ function conflicts(week1, week2) {
 }
 
 function viable_schedules(all_schedules) {
-    schedules = [];
 
-    for(var i = 0; i < all_schedules.length; i++){
-        schedule = all_schedules[i].slice();
-        if(viable(all_schedules[i][0], all_schedules[i].splice(1))){
-            console.log(schedule);
-            schedules.push(schedule);
-        }
-    }
+    return all_schedules.filter(function (schedule) {
+        return viable(schedule.slice())
+    });
 
-    return schedules;
 
-    function viable(head, tail) {
-        console.log("head: ", head, "\ntail: ", tail);
-        if(tail.length == 0){
+    function viable(schedule) {
+
+        if (schedule.length == 1) {
             return true
-        }
-        else {
-            for(var i = 0; i < tail.length; i++){
-                if(conflicts(head.Week, tail[i].Week)){return false}
+        } else {
+            head = schedule[0]; tail = schedule.slice(1);
+
+            for (var i = 0; i < tail.length; i++) {
+                if (conflicts(head.Week, tail[i].Week)) {
+                    return false
+                }
             }
-            return viable(tail[0], tail.splice(1))
+            return viable(tail)
         }
     }
 }
 
-
-
-
 module.exports = router;
-
