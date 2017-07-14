@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var Catalog = require('../models/classes');
-
+var product = require('cartesian-product');
 
 
 // GETS all Subjects from Catalog
@@ -39,15 +39,16 @@ router.get('/schedules', function(req, res){
         classes = courses.map(function (course) {return course.replace('_', ' ')});
         Catalog.find({Class:{$in:classes}}).then(function (sections) {
             var results = {};
+            // initialize results dictionary
             classes.map(function (elem) { results[elem] = []});
+            // sort sections into dictionary by Class data field
             sections.map(function (section) {results[section.Class].push(section);});
-            console.log(results);
-
-            res.send(results)
+            configured = Object.keys(results).map(function (key) { return results[key]});
+            all_schedules = product(configured);
+            res.send(all_schedules)
         })
     }
 });
-
 
 
 // returns true if week1 conflicts with week2; otherwise, false
@@ -72,5 +73,8 @@ function conflicts(week1, week2) {
         return !(time1[1] <= time2[0] || time2[1] <= time1[0]);
     }
 }
+
+
+
 module.exports = router;
 
