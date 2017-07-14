@@ -80,13 +80,18 @@ function conflicts(week1, week2) {
     }
 }
 
-function viable_schedules(all_schedules) {
 
-    return all_schedules.filter(function (schedule) {
+// Filters out schedules with conflicts from all
+// possible combinations of classes
+// schedules is a list of all possible class combinations
+function viable_schedules(schedules) {
+
+    return schedules.filter(function (schedule) {
         return viable(schedule.slice())
     });
 
-
+    // returns true if a schedule has no conflicts;
+    // otherwise, false.
     function viable(schedule) {
 
         if (schedule.length == 1) {
@@ -99,7 +104,7 @@ function viable_schedules(all_schedules) {
                     return false
                 }
             }
-            return viable(tail)
+            return viable(tail) // recursive step
         }
     }
 }
