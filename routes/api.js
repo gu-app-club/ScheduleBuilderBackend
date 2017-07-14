@@ -11,10 +11,12 @@ router.get('/subjects', function (req, res) {
     })
 });
 
-// GETS all Subject Courses combinations from Catalog
+// GETS all Subject, Course Number, and Title combinations from Catalog
 router.get('/classes', function (req, res) {
-    Catalog.distinct("Class").then(function(classes){
-        res.send(classes);
+    Catalog.aggregate({"$group" : {_id : {Class:"$Class", Title:"$Title"}}}).then(function (classes) {
+            var results = classes.map(function (result) { return result._id });
+            results.sort(function(a,b) {return (a.Class > b.Class) ? 1 : ((b.Class > a.Class) ? -1 : 0);} );
+        res.send(results)
     })
 });
 
@@ -73,7 +75,6 @@ function conflicts(week1, week2) {
         return !(time1[1] <= time2[0] || time2[1] <= time1[0]);
     }
 }
-
 
 
 module.exports = router;
