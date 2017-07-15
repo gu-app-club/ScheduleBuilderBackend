@@ -51,22 +51,25 @@ router.get('/schedules', function(req, res){
             sections.map(function (section) {results[section.Class].push(section);});
             configured = Object.keys(results).map(function (key) { return results[key]});
 
-            res.send(viable_schedules( product(configured)))
+            res.send(product(configured))
         })
     }
 });
 
 router.post('/schedules', function(req, res){
     classes = req.body.classes;
+    blocks = req.body.blocks;
     Catalog.find({Class:{$in:classes}}).then(function (sections) {
+
         var results = {};
         // initialize results dictionary
         classes.map(function (elem) {results[elem] = []});
         // sort sections into dictionary by Class data field
         sections.map(function (section) {results[section.Class].push(section);});
         configured = Object.keys(results).map(function (key) {return results[key]});
+        all_schedules = product(configured).map(function (schedule) { return schedule.concat(blocks) });
 
-        res.send(viable_schedules(product(configured)))
+        res.send(viable_schedules(all_schedules))
     })
 });
 
