@@ -30,7 +30,7 @@ router.get('/sections', function(req, res){
     })
 });
 
-// GETS a all viable schedules. Might change this to a POST method
+// GETS a all viable schedules
 router.get('/schedules', function(req, res){
     courses = req.query.courses;
 
@@ -58,7 +58,7 @@ router.get('/schedules', function(req, res){
 
 router.post('/schedules', function(req, res){
     classes = req.body.classes;
-    blocks = req.body.blocks;
+    // blocks = req.body.blocks;
     Catalog.find({Class:{$in:classes}}).then(function (sections) {
 
         var results = {};
@@ -67,7 +67,7 @@ router.post('/schedules', function(req, res){
         // sort sections into dictionary by Class data field
         sections.map(function (section) {results[section.Class].push(section);});
         configured = Object.keys(results).map(function (key) {return results[key]});
-        all_schedules = product(configured).map(function (schedule) { return schedule.concat(blocks) });
+        all_schedules = product(configured).map(function (schedule) { return schedule }); //.concat(blocks)
 
         res.send(all_schedules)
     })
