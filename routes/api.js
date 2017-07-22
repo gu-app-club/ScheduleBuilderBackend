@@ -68,8 +68,8 @@ router.post('/schedules', function(req, res){
         sections.map(function (section) {results[section.Class].push(section);});
         configured = Object.keys(results).map(function (key) {return results[key]});
         all_schedules = product(configured).map(function (schedule) { return schedule }); //.concat(blocks)
-
-        res.send(all_schedules)
+        schedules = viable_schedules(schedules);
+        res.send(JSON.stringify(schedules))
     })
 });
 
