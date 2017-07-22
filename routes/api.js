@@ -70,7 +70,7 @@ router.post('/schedules', function(req, res){
         all_schedules = product(configured).map(function (schedule) { return schedule }); //.concat(blocks)
         // schedules = viable_schedules(schedules);
         // res.send(JSON.stringify(schedules))
-        res.send(viable_schedules(all_schedules))
+        res.send(all_schedules)
     })
 });
 
