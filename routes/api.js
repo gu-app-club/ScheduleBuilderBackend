@@ -4,12 +4,12 @@ var Catalog = require('../models/classes');
 var product = require('cartesian-product');
 
 
-// GETS all Subjects from Catalog
-router.get('/subjects', function (req, res) {
-    Catalog.distinct("Subject").then(function (subjects) {
-        res.send({subjects:subjects})
-    })
-});
+// // GETS all Subjects from Catalog
+// router.get('/subjects', function (req, res) {
+//     Catalog.distinct("Subject").then(function (subjects) {
+//         res.send({subjects:subjects})
+//     })
+// });
 
 // GETS all Subject, Course Number, and Title combinations from Catalog
 router.get('/classes', function (req, res) {
@@ -22,39 +22,39 @@ router.get('/classes', function (req, res) {
     })
 });
 
-//GETS all Sections for a given Subject and Course (i.e. MATH 100)
-router.get('/sections', function(req, res){
-    Catalog.find({Subject:req.query.subject, Course:req.query.course},
-        'CRN Subject Course Section Week').then(function (sections) {
-        res.send({sections:sections})
-    })
-});
-
-// GETS a all viable schedules
-router.get('/schedules', function(req, res){
-    courses = req.query.courses;
-
-    if(typeof courses == 'string'){
-        classes = courses.replace('_', ' ');
-        Catalog.find({Class:classes}).then(function (sections) {
-            res.send(sections.map(function (course) { return [course] }))
-        })
-    }
-
-    else{
-        classes = courses.map(function (course) {return course.replace('_', ' ')});
-        Catalog.find({Class:{$in:classes}}).then(function (sections) {
-            var results = {};
-            // initialize results dictionary
-            classes.map(function (elem) { results[elem] = []});
-            // sort sections into dictionary by Class data field
-            sections.map(function (section) {results[section.Class].push(section);});
-            configured = Object.keys(results).map(function (key) { return results[key]});
-
-            res.send(product(configured))
-        })
-    }
-});
+// //GETS all Sections for a given Subject and Course (i.e. MATH 100)
+// router.get('/sections', function(req, res){
+//     Catalog.find({Subject:req.query.subject, Course:req.query.course},
+//         'CRN Subject Course Section Week').then(function (sections) {
+//         res.send({sections:sections})
+//     })
+// });
+//
+// // GETS a all viable schedules
+// router.get('/schedules', function(req, res){
+//     courses = req.query.courses;
+//
+//     if(typeof courses == 'string'){
+//         classes = courses.replace('_', ' ');
+//         Catalog.find({Class:classes}).then(function (sections) {
+//             res.send(sections.map(function (course) { return [course] }))
+//         })
+//     }
+//
+//     else{
+//         classes = courses.map(function (course) {return course.replace('_', ' ')});
+//         Catalog.find({Class:{$in:classes}}).then(function (sections) {
+//             var results = {};
+//             // initialize results dictionary
+//             classes.map(function (elem) { results[elem] = []});
+//             // sort sections into dictionary by Class data field
+//             sections.map(function (section) {results[section.Class].push(section);});
+//             configured = Object.keys(results).map(function (key) { return results[key]});
+//
+//             res.send(product(configured))
+//         })
+//     }
+// });
 
 router.post('/schedules', function(req, res){
     classes = req.body.classes;
