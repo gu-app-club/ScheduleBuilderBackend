@@ -13,7 +13,7 @@ router.get('/subjects', function (req, res) {
 
 // GETS all Subject, Course Number, and Title combinations from Catalog
 router.get('/classes', function (req, res) {
-    Catalog.aggregate({"$group" : {_id : {Subject:"$Subject", Course:"$Course", Title:"$Title"}}}
+    Catalog.aggregate({"$group" : {_id : {Subject:"$Subject", Course:"$Course", Title:"$Title", Credits:"$Credits"}}}
         ).then(function (classes) {
             var results = classes.map(function (result) { return result._id });
             results.sort(function(a,b) {return (a.Subject > b.Subject) ? 1 : ((b.Subject > a.Subject) ? -1
