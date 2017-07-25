@@ -20,7 +20,7 @@
     **Content:**
 
 
-      [
+      '[
         {
             "Title": "Principles of Accounting I",
             "Credits": "3.00",
@@ -32,7 +32,7 @@
             "Class": "ACCT 261"
         },
         ...
-      ]
+      ]'
 
 
 * **Sample Call:**
