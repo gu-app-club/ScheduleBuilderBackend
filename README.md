@@ -16,33 +16,22 @@
   A successful response should send the course Title, Credits, and Subject/Course in a dictionary.
 
   * **Code:** 200 <br />
-    **Content:** `[
-                      {
-                          "Title": "Principles of Accounting I",
-                          "Credits": "3.00",
-                          "Class": "ACCT 260"
-                      },
-                      {
-                          "Title": "Principles of Accounting II",
-                          "Credits": "3.00",
-                          "Class": "ACCT 261"
-                      },
-                      ...]`
+    **Content:**
 
-                       ```json
-                              [
-                                {
-                                    "Title": "Principles of Accounting I",
-                                    "Credits": "3.00",
-                                    "Class": "ACCT 260"
-                                },
-                                {
-                                    "Title": "Principles of Accounting II",
-                                    "Credits": "3.00",
-                                    "Class": "ACCT 261"
-                                },
-                                ...]
-                          ```
+
+              [
+                {
+                    "Title": "Principles of Accounting I",
+                    "Credits": "3.00",
+                    "Class": "ACCT 260"
+                },
+                {
+                    "Title": "Principles of Accounting II",
+                    "Credits": "3.00",
+                    "Class": "ACCT 261"
+                },
+                ...]
+         
 
 
 * **Sample Call:**
