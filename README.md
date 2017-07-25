@@ -1,39 +1,33 @@
-**Title**
+**Schedule Builder Backend RESTful API**
 ----
-  <_Additional information about your API call. Try to use verbs that match both request type (fetching vs modifying) and plurality (one vs multiple)._>
+  Returns all possible classes in a JSON Array
 
 * **URL**
 
-  <_The URL Structure (path only, no root url)_>
+  /api/classes
 
 * **Method:**
-  
-  <_The request type_>
 
-  `GET` | `POST` | `DELETE` | `PUT`
-  
-*  **URL Params**
+  `GET`
 
-   <_If URL params exist, specify them in accordance with name mentioned in URL section. Separate into optional and required. Document data constraints._> 
-
-   **Required:**
- 
-   `id=[integer]`
-
-   **Optional:**
- 
-   `photo_id=[alphanumeric]`
-
-* **Data Params**
-
-  <_If making a post request, what should the body payload look like? URL Params rules apply here too._>
 
 * **Success Response:**
   
-  <_What should the status code be on success and is there any returned data? This is useful when people need to to know what their callbacks should expect!_>
+  A successful response should send the course Title, Credits, and Subject/Course in a dictionary.
 
   * **Code:** 200 <br />
-    **Content:** `{ id : 12 }`
+    **Content:** `[
+                      {
+                          "Title": "Principles of Accounting I",
+                          "Credits": "3.00",
+                          "Class": "ACCT 260"
+                      },
+                      {
+                          "Title": "Principles of Accounting II",
+                          "Credits": "3.00",
+                          "Class": "ACCT 261"
+                      },
+                      ...]`
  
 * **Error Response:**
 
@@ -49,8 +43,11 @@
 
 * **Sample Call:**
 
-  <_Just a sample call to your endpoint in a runnable format ($.ajax call or a curl request) - this makes life easier and more predictable._> 
-
-* **Notes:**
-
-  <_This is where all uncertainties, commentary, discussion etc. can go. I recommend timestamping and identifying oneself when leaving comments here._> 
+  '  $.ajax({
+       url: "/api/classes",
+       dataType: "json",
+       type : "GET",
+       success : function(r) {
+         console.log(r);
+       }
+     });'
