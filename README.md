@@ -28,31 +28,24 @@
                           "Class": "ACCT 261"
                       },
                       ...]`
- 
-* **Error Response:**
 
-  <_Most endpoints will have many ways they can fail. From unauthorized access, to wrongful parameters etc. All of those should be liste d here. It might seem repetitive, but it helps prevent assumptions from being made where they should be._>
+                       ```json
+                              [
+                                {
+                                    "Title": "Principles of Accounting I",
+                                    "Credits": "3.00",
+                                    "Class": "ACCT 260"
+                                },
+                                {
+                                    "Title": "Principles of Accounting II",
+                                    "Credits": "3.00",
+                                    "Class": "ACCT 261"
+                                },
+                                ...]
+                          ```
 
-  * **Code:** 401 UNAUTHORIZED <br />
-    **Content:** `{ error : "Log in" }`
-
-  OR
-
-  * **Code:** 422 UNPROCESSABLE ENTRY <br />
-    **Content:** `{ error : "Email Invalid" }`
 
 * **Sample Call:**
-
-  '''javascript
-  $.ajax({
-       url: "/api/classes",
-       dataType: "json",
-       type : "GET",
-       success : function(r) {
-         console.log(r);
-       }
-     });
-     '''
 
   ```javascript
         $.ajax({
