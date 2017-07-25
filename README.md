@@ -20,19 +20,18 @@
     **Content:**
 
 
-      '[
-        {
-            "Title": "Principles of Accounting I",
-            "Credits": "3.00",
-            "Class": "ACCT 260"
-        },
-        {
-            "Title": "Principles of Accounting II",
-            "Credits": "3.00",
-            "Class": "ACCT 261"
-        },
-        ...
-      ]'
+              [
+                {
+                    "Title": "Principles of Accounting I",
+                    "Credits": "3.00",
+                    "Class": "ACCT 260"
+                },
+                {
+                    "Title": "Principles of Accounting II",
+                    "Credits": "3.00",
+                    "Class": "ACCT 261"
+                },
+                ...]
 
 
 * **Sample Call:**
