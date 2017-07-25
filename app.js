@@ -10,6 +10,7 @@ var mongoose = require('mongoose');
 var index = require('./routes/index');
 var users = require('./routes/users');
 var api = require('./routes/api');
+require('dotenv').config();
 
 var app = express();
 
@@ -18,9 +19,8 @@ var options = {
     replset: { socketOptions: { keepAlive: 300000, connectTimeoutMS: 30000 } }
 };
 
-mongodbUri = 'mongodb://tjdford:TJ1994maxman@ds139288.mlab.com:39288/schedule-builder/catalog-fall-2017';
 
-mongoose.connect(mongodbUri, options);
+mongoose.connect(process.env.MONGODB_URI, options);
 mongoose.Promise = global.Promise;
 
 var conn = mongoose.connection;
