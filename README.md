@@ -13,25 +13,26 @@
 
 * **Success Response:**
   
-  A successful response should send the course Title, Credits, and Subject/Course in a dictionary.
+  A successful response should send an array of dictionaries where each dictionary contains
+  the course information (Keys: Title, Credits, Class).
 
   * **Code:** 200 <br />
     **Content:**
 
 
-              [
-                {
-                    "Title": "Principles of Accounting I",
-                    "Credits": "3.00",
-                    "Class": "ACCT 260"
-                },
-                {
-                    "Title": "Principles of Accounting II",
-                    "Credits": "3.00",
-                    "Class": "ACCT 261"
-                },
-                ...]
-         
+      [
+        {
+            "Title": "Principles of Accounting I",
+            "Credits": "3.00",
+            "Class": "ACCT 260"
+        },
+        {
+            "Title": "Principles of Accounting II",
+            "Credits": "3.00",
+            "Class": "ACCT 261"
+        },
+        ...
+      ]
 
 
 * **Sample Call:**
