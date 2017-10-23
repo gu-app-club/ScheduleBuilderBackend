@@ -23,7 +23,6 @@ router.post('/sections', function(req, res){
     });
 });
 
-
 router.post('/schedules', function(req, res){
     classes = req.body.classes;
     blocks = req.body.blocks;
@@ -37,7 +36,7 @@ router.post('/schedules', function(req, res){
         configured = Object.keys(results).map(function (key) {return results[key]});
 
         all_schedules = product(configured).map(function (schedule) {return schedule});
-        all_schedules = all_schedules.map(function (schedule) {return schedule.concat(blocks)});
+        all_schedules = all_schedules.map(function (schedule) {return schedule}); //.concat(blocks)});
 
         res.send(viable_schedules(all_schedules))
     })
@@ -71,7 +70,6 @@ function conflicts(week1, week2) {
     }
 }
 
-
 // Filters out schedules with conflicts from all
 // possible combinations of classes
 // schedules is a list of all possible class combinations
@@ -100,5 +98,4 @@ function viable_schedules(schedules) {
         }
     }
 }
-
 module.exports = router;
