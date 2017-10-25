@@ -4,71 +4,71 @@ var Schema = mongoose.Schema;
 
 const ClassSchema = new Schema({
 
-    CRN: {
+    crn: {
         type: String,
         required: [true, 'CRN Field is required.']
     },
-    Subject: {
+    subject: {
         type: String,
         required: [true, 'Subject Field is required.']
     },
-    Course: {
+    course: {
         type: String,
         required: [true, 'Course Field is required.']
     },
-    Section: {
+    section: {
         type: String,
         required: [true, 'Section Field is required.']
     },
-    Credits: {
+    credits: {
         type: String,
         required: [true, 'Credits Field is required.']
     },
-    Title: {
+    title: {
         type: String,
         required: [true, 'Title Field is required.']
     },
-    Campus: {
+    campus: {
         type: String,
         required: [true, 'Campus Field is required.']
     },
-    Start_Date: {
+    start_date: {
         type: String,
         required: [true, 'Start_Date Field is required.']
     },
-    End_Date: {
+    end_date: {
         type: String,
         required: [true, 'End_Date Field is required.']
     },
-    Days: {
+    days: {
         type: String,
         required: [true, 'Days Field is required.']
     },
-    Times: {
+    times: {
         type: String,
         required: [true, 'Times Field is required.']
     },
-    Building: {
+    building: {
         type: String,
         required: [true, 'Building Field is required.']
     },
-    Room: {
+    room: {
         type: String,
         required: [true, 'Room Field is required.']
     },
-    Instructor: {
+    instructor: {
         type: String,
         required: [true, 'Campus Field is required.']
     },
-    Week: {
+    week: {
         type: {String:[]},
         required: [true, 'Campus Field is required.']
     },
-    Class:{
+    seminar:{
         type: String
     }
 });
 
-const Class = mongoose.model('catalog-fall-2017', ClassSchema);
+const Class = mongoose.model('catalog-spring-2017', ClassSchema);
 
 module.exports = Class;
