@@ -69,6 +69,6 @@ const ClassSchema = new Schema({
     }
 });
 
-const Class = mongoose.model('catalog-fall-2017', ClassSchema);
+const Class = mongoose.model('catalog-spring-2018-temp', ClassSchema);
 
 module.exports = Class;
