@@ -5,7 +5,7 @@ var Schema = mongoose.Schema;
 const ClassSchema = new Schema({
 
     crn: {
-        type: String,
+        type: Number,
         required: [true, 'CRN Field is required.']
     },
     subject: {
@@ -69,6 +69,6 @@ const ClassSchema = new Schema({
     }
 });
 
-const Class = mongoose.model('catalog-spring-2017', ClassSchema);
+const Class = mongoose.model('catalog-spring-2018', ClassSchema);
 
 module.exports = Class;
