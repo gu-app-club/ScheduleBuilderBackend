@@ -46,11 +46,7 @@ router.post('/schedules', function(req, res){
         all_schedules = all_schedules.map(function (schedule) {return schedule}); //.concat(blocks)});
 
         all = viable_schedules(all_schedules);
-        for(i = 0; i < all.length; i++)
-            console.log(all[i].map(function (course) {
-                return course.Days + " " + course.Times + " " + course.CRN;
-            }));
-        console.log(all.length);
+
         res.send(viable_schedules(all_schedules));
         // res.send(viable_schedules(all_schedules));
     })
@@ -99,7 +95,6 @@ function viable_schedules(schedules) {
             return true
         } else {
             head = schedule[0]; tail = schedule.slice(1);
-            console.log(head.Class);
 
             for (var i = 0; i < tail.length; i++) {
                 if (conflicts(head.week, tail[i].week)) {
