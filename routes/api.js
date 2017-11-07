@@ -45,10 +45,7 @@ router.post('/schedules', function(req, res){
         all_schedules = product(configured).map(function (schedule) {return schedule});
         all_schedules = all_schedules.map(function (schedule) {return schedule}); //.concat(blocks)});
 
-        all = viable_schedules(all_schedules);
-
         res.send(viable_schedules(all_schedules));
-        // res.send(viable_schedules(all_schedules));
     })
 });
 
