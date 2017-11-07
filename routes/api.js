@@ -23,6 +23,13 @@ router.post('/sections', function(req, res){
     });
 });
 
+router.post('/saved_schedule', function (req, res) {
+    crns = req.body.crns;
+    Catalog.find({CRN:crns}).then(function (sections) {
+        res.send(viable_schedules([sections]));
+    })
+});
+
 router.post('/schedules', function(req, res){
     classes = req.body.classes;
     blocks = req.body.blocks;
@@ -38,10 +45,16 @@ router.post('/schedules', function(req, res){
         all_schedules = product(configured).map(function (schedule) {return schedule});
         all_schedules = all_schedules.map(function (schedule) {return schedule}); //.concat(blocks)});
 
-        res.send(viable_schedules(all_schedules))
+        all = viable_schedules(all_schedules);
+        for(i = 0; i < all.length; i++)
+            console.log(all[i].map(function (course) {
+                return course.Days + " " + course.Times + " " + course.CRN;
+            }));
+        console.log(all.length);
+        res.send(viable_schedules(all_schedules));
+        // res.send(viable_schedules(all_schedules));
     })
 });
-
 
 // returns true if week1 conflicts with week2; otherwise, false
 // week1 and week2 are dictionaries
@@ -57,7 +70,7 @@ function conflicts(week1, week2) {
     });
 
     // returns false if all values in the array are false; otherwise,
-    // week1 and week2, and the function returns true
+    // week1 and week2 conflict, and the function returns true
     return !conflict.every(function (value) { return !value });
 
     // returns true if time1 conflicts with time2; otherwise false
@@ -74,7 +87,6 @@ function conflicts(week1, week2) {
 // possible combinations of classes
 // schedules is a list of all possible class combinations
 function viable_schedules(schedules) {
-
     return schedules.filter(function (schedule) {
         return viable(schedule.slice())
     });
@@ -83,7 +95,7 @@ function viable_schedules(schedules) {
     // otherwise, false.
     function viable(schedule) {
 
-        if (schedule.length == 1) {
+        if (schedule.length < 2) {
             return true
         } else {
             head = schedule[0]; tail = schedule.slice(1);
@@ -98,4 +110,5 @@ function viable_schedules(schedules) {
         }
     }
 }
+
 module.exports = router;
