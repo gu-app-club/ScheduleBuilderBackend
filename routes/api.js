@@ -43,62 +43,71 @@ router.post('/schedules', function(req, res){
         configured = Object.keys(results).map(function (key) {return results[key]});
 
         all_schedules = product(configured).map(function (schedule) {return schedule});
-        all_schedules = all_schedules.map(function (schedule) {return schedule}); //.concat(blocks)});
+        // all_schedules = all_schedules.map(function (schedule) {return schedule}); //.concat(blocks)});
 
         res.send(viable_schedules(all_schedules));
     })
 });
 
-// returns true if week1 conflicts with week2; otherwise, false
-// week1 and week2 are dictionaries
-function conflicts(week1, week2) {
+// returns true if any times in the day array conflict; otherwise, false
+function conflicts(day) {
 
-    // iterates through the dictionary keys
-    // checks if corresponding time ranges
-    // from week1 and week2 conflict with each other
-    // the results are return in an array
+    if(day.length < 2)
+        return false;
 
-    conflict = Object.keys(week1).map(function(key){
-        return time_conflicts(week1[key], week2[key]);
-    });
+    var head = day[0]; var tail = day.slice(1);
 
-    // returns false if all values in the array are false; otherwise,
-    // week1 and week2 conflict, and the function returns true
-    return !conflict.every(function (value) { return !value });
+    for (var i = 0; i < tail.length; i++) {
+        if (time_conflicts(head, tail[i]))
+            return true
+    }
+    return conflicts(tail); // recursive step
 
     // returns true if time1 conflicts with time2; otherwise false
     function time_conflicts(time1, time2){
+
         if(time1 == null || time2 == null){return false;}  // check if time1 or time2 are null
         // convert time from strings to Date Objects
         time1 = time1.map(function (time) { return new Date("1/18/2017 " + time) });
         time2 = time2.map(function (time) { return new Date("1/18/2017 " + time) });
+
         return !(time1[1] <= time2[0] || time2[1] <= time1[0]);
     }
 }
 
-// Filters out schedules with conflicts from all
-// possible combinations of classes
-// schedules is a list of all possible class combinations
-function viable_schedules(schedules) {
-    return schedules.filter(function (schedule) {
-        return viable(schedule.slice())
+
+// returns all of the viable schedules from all_schedules
+function viable_schedules(all_schedules) {
+
+    return all_schedules.filter(function (schedule) {
+        return viable(schedule)
     });
 
-    // returns true if a schedule has no conflicts;
-    // otherwise, false.
+    // returns true if a schedule is viable; otherwise, false
     function viable(schedule) {
 
         if (schedule.length < 2) {
             return true
         } else {
-            head = schedule[0]; tail = schedule.slice(1);
 
-            for (var i = 0; i < tail.length; i++) {
-                if (conflicts(head.week, tail[i].week)) {
-                    return false
-                }
-            }
-            return viable(tail) // recursive step
+            // aggregates all of the week attributes in a schedule
+            // into one week dictionary
+            var weeks = schedule.map(function (schedule) { return schedule.week });
+            var week = {"M":[], "T":[], "W":[], "R":[], "F":[]};
+            var keys = Object.keys(weeks[0]);
+            keys.forEach(function (day) {
+                weeks.forEach(function (time) {
+                    if(time[day] != null)
+                        week[day].push(time[day]);
+                });
+            });
+
+            // checks each day of the week to see if there are
+            // any conflicting classes
+            for(i = 0; i < keys.length; i++)
+                if(conflicts(week[keys[i]]))
+                    return false;
+            return true;
         }
     }
 }
